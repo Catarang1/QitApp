@@ -24,6 +24,10 @@
 }
 
 .button {
+    -fx-background-color: transparent;
+}
+
+#shutdown, #cancel {
     -fx-border-color: linear-gradient(to right, #f15b25, #ee2b78);
     -fx-border-width: 3;
     -fx-border-radius: 5;

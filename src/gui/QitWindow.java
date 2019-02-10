@@ -13,7 +13,7 @@ import javafx.stage.*;
  */
 public class QitWindow extends Application {
 	
-	private Stage stage;
+	public static Stage stage;
 	private Scene scene;
 	private Parent root;
 	private FXMLLoader loader;
