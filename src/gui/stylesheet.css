@@ -1,0 +1,31 @@
+
+
+#header {
+    -fx-background-color: linear-gradient(to right, #f15b25, #ee2b78);
+}
+
+#content {
+    -fx-background-color: #1c2023;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-padding: 0 0 -10 0;
+    -fx-fill: white;
+    -fx-text-fill: white;
+}
+
+#hourField{
+    -fx-highlight-fill: #f15b25;
+}
+
+#minuteField{
+    -fx-highlight-fill: #ee2b78;
+}
+
+.button {
+    -fx-border-color: linear-gradient(to right, #f15b25, #ee2b78);
+    -fx-border-width: 3;
+    -fx-border-radius: 5;
+    -fx-background-color: transparent;
+}
