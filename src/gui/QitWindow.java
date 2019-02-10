@@ -4,7 +4,8 @@ import java.io.*;
 import javafx.application.Application;
 import javafx.fxml.*;
 import javafx.scene.*;
-import javafx.stage.Stage;
+import javafx.scene.paint.*;
+import javafx.stage.*;
 
 /**
  *
@@ -22,7 +23,9 @@ public class QitWindow extends Application {
 		loader = new FXMLLoader(getClass().getResource("graph.fxml"));
 		root = loader.load();
 		scene = new Scene(root);
-		stage = new Stage();
+		stage = new Stage(StageStyle.UNDECORATED);
+		stage.setScene(scene);
+		stage.show();
 	}
 
 	/**
