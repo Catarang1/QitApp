@@ -3,7 +3,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -126,7 +125,4 @@
          </children>
       </StackPane>
    </children>
-   <effect>
-      <DropShadow blurType="GAUSSIAN" height="70.0" radius="34.5" width="70.0" />
-   </effect>
 </VBox>

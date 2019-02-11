@@ -34,37 +34,18 @@ public class GraphController implements Initializable {
 	@FXML private Arc timerVisual;
 	@FXML private Button minimize;
 	@FXML private Button close;
-
+	@FXML private Text h;
+	@FXML private Text m;
+	
 	private double xOffset = 0;
 	private double yOffset = 0;
 	private FadeTransition fade = new FadeTransition();
 	private FadeTransition show = new FadeTransition();
 	Timeline visualCountdown = new Timeline();
-	private SVGPath circle = new SVGPath();
-	private SVGPath cross = new SVGPath();
-	private SVGPath mini = new SVGPath();
-	@FXML
-	private Text h;
-	@FXML
-	private Text m;
-
-	private enum Stage {
-		Setup, Countdown;
-	}
+	private enum Stage {Setup, Countdown;}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-
-		circle.setFill(Color.web("#1c2023"));
-		cross.setFill(Color.web("#1c2023"));
-		mini.setFill(Color.web("#1c2023"));
-
-		circle.setContent("M16,8c0,4.4-3.6,8-8,8s-8-3.6-8-8s3.6-8,8-8S16,3.6,16,8z");
-		cross.setContent("M8,0C3.6,0,0,3.6,0,8s3.6,8,8,8s8-3.6,8-8S12.4,0,8,0z M12.4,9.6c0.8,0.8,0.8,2,0,2.8C12,12.8,11.5,13,11,13\n"
-				+ "	s-1-0.2-1.4-0.6L8,10.8l-1.6,1.6C6,12.8,5.5,13,5,13s-1-0.2-1.4-0.6c-0.8-0.8-0.8-2,0-2.8L5.2,8L3.6,6.4c-0.8-0.8-0.8-2,0-2.8\n"
-				+ "	s2-0.8,2.8,0L8,5.2l1.6-1.6c0.8-0.8,2-0.8,2.8,0s0.8,2,0,2.8L10.8,8L12.4,9.6z");
-		mini.setContent("M8,0C3.6,0,0,3.6,0,8s3.6,8,8,8s8-3.6,8-8S12.4,0,8,0z M12.2,10H3.8c-1.1,0-2-0.9-2-2s0.9-2,2-2h8.5\n"
-				+ "	c1.1,0,2,0.9,2,2S13.3,10,12.2,10z");
 
 		header.setOnMousePressed(e -> {
 			xOffset = e.getSceneX();
@@ -87,7 +68,7 @@ public class GraphController implements Initializable {
 			String shutdownCommand = "";
 			String osName = System.getProperty("os.name");
 			if (osName.startsWith("Win")) {
-				shutdownCommand = "shutdown.exe -s -t 0";
+				shutdownCommand = "shutdown.exe -s -f -t 0";
 			} else if (osName.startsWith("Linux") || osName.startsWith("Mac")) {
 				shutdownCommand = "shutdown -h now";
 			} else {
