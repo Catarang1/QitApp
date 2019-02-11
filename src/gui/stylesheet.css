@@ -1,4 +1,15 @@
 
+@font-face {
+    src: url("UbuntuMono-Bold.ttf");
+}
+
+@font-face {
+    src: url("UbuntuMono-Regular.ttf");
+}
+
+* {
+    -fx-font-family: Ubuntu Mono;
+}
 
 #header {
     -fx-background-color: linear-gradient(to right, #f15b25, #ee2b78);
@@ -13,6 +24,12 @@
     -fx-padding: 0 0 -10 0;
     -fx-fill: white;
     -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 102;
+}
+
+#h, #m {
+    -fx-font-size: 48;
 }
 
 #hourField{
@@ -25,6 +42,11 @@
 
 .button {
     -fx-background-color: transparent;
+    -fx-font-size: 21px;
+}
+
+#close, #minimize {
+    -fx-padding: 0;
 }
 
 #shutdown, #cancel {
@@ -32,4 +54,6 @@
     -fx-border-width: 3;
     -fx-border-radius: 5;
     -fx-background-color: transparent;
+    -fx-font-weight: bold;
 }
+

@@ -4,7 +4,6 @@ import java.io.*;
 import javafx.application.Application;
 import javafx.fxml.*;
 import javafx.scene.*;
-import javafx.scene.paint.*;
 import javafx.stage.*;
 
 /**

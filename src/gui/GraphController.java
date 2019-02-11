@@ -12,6 +12,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.*;
 import javafx.scene.shape.*;
+import javafx.scene.text.*;
 import javafx.util.*;
 
 /**
@@ -42,6 +43,10 @@ public class GraphController implements Initializable {
 	private SVGPath circle = new SVGPath();
 	private SVGPath cross = new SVGPath();
 	private SVGPath mini = new SVGPath();
+	@FXML
+	private Text h;
+	@FXML
+	private Text m;
 
 	private enum Stage {
 		Setup, Countdown;
@@ -73,29 +78,29 @@ public class GraphController implements Initializable {
 
 		fade.setFromValue(1);
 		fade.setToValue(0);
-		fade.setDuration(Duration.millis(250));
+		fade.setDuration(Duration.millis(150));
 		show.setFromValue(0);
 		show.setToValue(1);
-		show.setDuration(Duration.millis(250));
+		show.setDuration(Duration.millis(150));
 		fade.setOnFinished(e -> show.play());
 		visualCountdown.setOnFinished(e -> {
-//			String shutdownCommand = "";
-//			String osName = System.getProperty("os.name");
-//			if (osName.startsWith("Win")) {
-//				shutdownCommand = "shutdown.exe -s -t 0";
-//			} else if (osName.startsWith("Linux") || osName.startsWith("Mac")) {
-//				shutdownCommand = "shutdown -h now";
-//			} else {
-//				System.err.println("Shutdown unsupported operating system ...");
-//				//closeApp();
-//			}
-//			Runtime runtime = Runtime.getRuntime();
-//			try {
-//				Process proc = runtime.exec(shutdownCommand);
-//			} catch (IOException ex) {
-//				Logger.getLogger(GraphController.class.getName()).log(Level.SEVERE, null, ex);
-//			}
-//			System.exit(0);
+			String shutdownCommand = "";
+			String osName = System.getProperty("os.name");
+			if (osName.startsWith("Win")) {
+				shutdownCommand = "shutdown.exe -s -t 0";
+			} else if (osName.startsWith("Linux") || osName.startsWith("Mac")) {
+				shutdownCommand = "shutdown -h now";
+			} else {
+				System.err.println("Shutdown unsupported operating system ...");
+				System.exit(0);
+			}
+			Runtime runtime = Runtime.getRuntime();
+			try {
+				Process proc = runtime.exec(shutdownCommand);
+			} catch (IOException ex) {
+				Logger.getLogger(GraphController.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			System.exit(0);
 		});
 	}
 
@@ -142,34 +147,14 @@ public class GraphController implements Initializable {
 		fade.play();
 	}
 
+	@FXML
 	public void close() {
 		QitWindow.stage.close();
 	}
 
+	@FXML
 	public void minimize() {
 		QitWindow.stage.setIconified(true);
-	}
-
-	@FXML
-	public void mouseoverCloseShow() {
-		close.setGraphic(cross);
-		minimize.setGraphic(circle);
-	}
-
-	@FXML
-	public void mouseoverCloseHide() {
-		close.setGraphic(circle);
-	}
-
-	@FXML
-	public void mouseoverMinimizeShow() {
-		minimize.setGraphic(mini);
-		close.setGraphic(circle);
-	}
-
-	@FXML
-	public void mouseoverMinimizeHide() {
-		minimize.setGraphic(circle);
 	}
 
 }
