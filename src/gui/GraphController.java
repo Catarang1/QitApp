@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.*;
 import javafx.animation.*;
+import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
@@ -13,11 +14,6 @@ import javafx.scene.shape.*;
 import javafx.scene.text.*;
 import javafx.util.*;
 
-/**
- * FXML Controller class
- *
- * @author Jan
- */
 public class GraphController implements Initializable {
 
 	@FXML private VBox root;
@@ -40,68 +36,44 @@ public class GraphController implements Initializable {
 	private FadeTransition fade = new FadeTransition();
 	private FadeTransition show = new FadeTransition();
 	Timeline visualCountdown = new Timeline();
+	private EventHandler<ActionEvent> shutdownEventHandler;
 	private enum Stage {Setup, Countdown;}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		setupShutdownHandler();
 
-		header.setOnMousePressed(e -> {
-			xOffset = e.getSceneX();
-			yOffset = e.getSceneY();
-		});
-
-		header.setOnMouseDragged((MouseEvent event) -> {
-			QitWindow.stage.setX(event.getScreenX() - xOffset);
-			QitWindow.stage.setY(event.getScreenY() - yOffset);
-		});
-
-		fade.setFromValue(1);
-		fade.setToValue(0);
-		fade.setDuration(Duration.millis(150));
-		show.setFromValue(0);
-		show.setToValue(1);
-		show.setDuration(Duration.millis(150));
-		fade.setOnFinished(e -> show.play());
-		visualCountdown.setOnFinished(e -> {
-			String shutdownCommand = "";
-			String osName = System.getProperty("os.name");
-			if (osName.startsWith("Win")) {
-				shutdownCommand = "shutdown.exe -s -f -t 0";
-			} else if (osName.startsWith("Linux") || osName.startsWith("Mac")) {
-				shutdownCommand = "shutdown -h now";
-			} else {
-				System.err.println("Shutdown unsupported operating system ...");
-				System.exit(0);
-			}
-			Runtime runtime = Runtime.getRuntime();
-			try {
-				Process proc = runtime.exec(shutdownCommand);
-			} catch (IOException ex) {
-				Logger.getLogger(GraphController.class.getName()).log(Level.SEVERE, null, ex);
-			}
-			System.exit(0);
-		});
+		setupWindowDrag();
+		
+		setupTransitions();
 	}
 
 	@FXML
 	public void startCountdown() {
+		
+		// fix for interpolator at show && fade transitions
+		if (fade.getStatus() == Animation.Status.RUNNING||show.getStatus() == Animation.Status.RUNNING) return;
+		
 		visualCountdown.getKeyFrames().clear();
 		String hours = hourField.getText();
 		String minutes = minuteField.getText();
-
-		if (!hours.matches("[0-9]{1,2}") || !minutes.matches("[0-9]{1,2}")) {
+		
+		// ? valid input
+		if (!hours.matches("(\\d){1,2}") || !minutes.matches("(\\d){1,2}")) {
 			hourField.setText("00");
 			minuteField.setText("00");
 			return;
 		}
-
+		
+		// cast input and compute length of countdown
 		int parsedHours = Integer.parseInt(hours);
 		int parsedMinutes = Integer.parseInt(minutes);
-		int countdown_length = (parsedHours * 60 * 60) + (parsedMinutes * 60);
-		System.out.println(countdown_length);
-
+		int countdown_length = (parsedHours * 60 /* minutes */ * 60 /* seconds */) + (parsedMinutes * 60 /* seconds */);
+		
 		showStage(Stage.Countdown);
-
+		
+		// animate clock
 		visualCountdown.getKeyFrames().add(new KeyFrame(Duration.ZERO, new KeyValue(timerVisual.lengthProperty(), 0)));
 		visualCountdown.getKeyFrames().add(new KeyFrame(Duration.seconds(countdown_length), new KeyValue(timerVisual.lengthProperty(), 360)));
 		visualCountdown.play();
@@ -109,6 +81,10 @@ public class GraphController implements Initializable {
 
 	@FXML
 	public void cancelCountdown() {
+		
+		// fix for interpolator at show && fade transitions
+		if (fade.getStatus() == Animation.Status.RUNNING||show.getStatus() == Animation.Status.RUNNING) return;
+		
 		showStage(Stage.Setup);
 		visualCountdown.stop();
 	}
@@ -134,6 +110,51 @@ public class GraphController implements Initializable {
 	@FXML
 	public void minimize() {
 		QitWindow.stage.setIconified(true);
+	}
+	
+	private void setupWindowDrag() {
+		header.setOnMousePressed(e -> {
+			xOffset = e.getSceneX();
+			yOffset = e.getSceneY();
+		});
+
+		header.setOnMouseDragged((MouseEvent event) -> {
+			QitWindow.stage.setX(event.getScreenX() - xOffset);
+			QitWindow.stage.setY(event.getScreenY() - yOffset);
+		});
+	}
+	
+	private void setupTransitions() {
+		fade.setFromValue(1);
+		fade.setToValue(0);
+		fade.setDuration(Duration.millis(150));
+		show.setFromValue(0);
+		show.setToValue(1);
+		show.setDuration(Duration.millis(150));
+		fade.setOnFinished(e -> show.play());
+		visualCountdown.setOnFinished(shutdownEventHandler);
+	}
+	
+	private void setupShutdownHandler() {
+		shutdownEventHandler = e -> {
+			String shutdownCommand = "";
+			String osName = System.getProperty("os.name");
+			if (osName.startsWith("Win")) {
+				shutdownCommand = "shutdown.exe -s -f -t 0";
+			} else if (osName.startsWith("Linux") || osName.startsWith("Mac")) {
+				shutdownCommand = "shutdown -h now";
+			} else {
+				System.err.println("Shutdown unsupported operating system ...");
+				System.exit(0);
+			}
+			Runtime runtime = Runtime.getRuntime();
+			try {
+				Process proc = runtime.exec(shutdownCommand);
+			} catch (IOException ex) {
+				Logger.getLogger(GraphController.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			System.exit(0);
+		};
 	}
 
 }
