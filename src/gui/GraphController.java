@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.*;
 import javafx.animation.*;
+import javafx.beans.value.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
@@ -37,10 +38,13 @@ public class GraphController implements Initializable {
 	private FadeTransition show = new FadeTransition();
 	Timeline visualCountdown = new Timeline();
 	private EventHandler<ActionEvent> shutdownEventHandler;
+
 	private enum Stage {Setup, Countdown;}
 
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		
+		setupInput();
 		
 		setupShutdownHandler();
 
@@ -87,6 +91,12 @@ public class GraphController implements Initializable {
 		
 		showStage(Stage.Setup);
 		visualCountdown.stop();
+	}
+	
+	private void setupInput() {
+		hourField.textProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+			if (newValue.length() > 2) hourField.setText(newValue.substring(1));
+		});
 	}
 
 	private void showStage(Stage stage) {
